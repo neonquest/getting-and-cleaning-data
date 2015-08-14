@@ -35,9 +35,9 @@ length(zip[zip])
 library(data.table)
 url = "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv"
 file = "housing_survey_Idaho_2006.csv"
-download.file(url, destfile = file)
+download.file(url, destfile = file, method = "curl")
 
-DT = fread(url)
+DT = fread(paste("file://", file, sep = ""))
 
-
+DT[,mean(pwgtp15),by=SEX]
 
