@@ -150,3 +150,38 @@ df2 = data.frame(id = sample(1:10), y = rnorm(10))
 df3 = data.frame(id = sample(1:10), z = rnorm(10))
 df_all = list(df1, df2, df3)
 arrange(join_all(df_all), id)
+
+
+
+#Read test data
+test_subject = read.table(paste(topdir, "test/subject_test.txt", sep = ""))
+test_X = read.table(paste(topdir, "test/X_test.txt", sep = ""))
+test_y = read.table(paste(topdir, "test/y_test.txt", sep = ""))
+
+dim(test_X); dim(test_y); dim(test_subject);
+
+#Read train data
+train_subject = read.table(paste(topdir, "train/subject_train.txt", sep = ""), col.names = "subject")
+train_X = read.table(paste(topdir, "train/X_train.txt", sep = ""), col.names = features)
+train_y = read.table(paste(topdir, "train/y_train.txt", sep = ""), col.names = "activity")
+
+dim(train_X); dim(train_y); dim(train_subject);
+
+# Combine subject, feature (X) & label (y) data
+test_all = cbind(test_subject, test_X, test_y); dim(test_all)
+names(test_all)
+train_all = cbind(train_subject, train_X, train_y); dim(train_all)
+
+# Merge the training and the test sets to create one data set.
+all_data = rbind(train_all, test_all); dim(all_data)
+
+str(names(all_data))
+
+## str(features)
+mean_std_features = filter(features, grepl('mean\\(\\)|std\\(\\)', V2, perl = TRUE)) %>% droplevels()
+str(mean_std_features)
+mean_std_features$V1
+str(all_data)
+
+# Extract only the measurements on the mean and standard deviation for each measurement.
+mean_std_data = select(all_data, mean_std_features$V1)
